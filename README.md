@@ -11,4 +11,5 @@ data -> Data and Images<br>
 Section 0 -> Python basics that will be expected knowledge<br>
 Section 1 -> Implementing some basic Machine Learning Algorithms in Python with Numpy<br>
 Section 2 -> Pytorch intro and basics, re-implementing some basic Machine Learning Algorithms in Python with Pytorch<br>
+Section 3 -> Implementing our first Neural Network, a Multi-Layer Perceptron (MLP) for Classification and Non-Linear Regression with Pytorch<br>
 
