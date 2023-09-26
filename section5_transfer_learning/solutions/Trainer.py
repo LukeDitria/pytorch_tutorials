@@ -1,44 +1,27 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils.data.dataloader as dataloader
+import os
 
 from tqdm.notebook import trange, tqdm
 
 
-class LeNet(nn.Module):
-    def __init__(self, channels_in, device, loss_fun, batch_size, learning_rate):
+class ModelTrainer(nn.Module):
+    def __init__(self, model, device, loss_fun, batch_size, learning_rate, save_dir, model_name, start_from_checkpoint=False):
         # Call the __init__ function of the parent nn.module class
-        super(LeNet, self).__init__()
-        # Define Convolution Layers
-        # conv1 6 channels_inx5x5 kernels
+        super(ModelTrainer, self).__init__()
         self.optimizer = None
-        self.conv1 = nn.Conv2d(channels_in, 6, kernel_size=5)
-        
-        # conv2 16 6x5x5 kernels
-        self.conv2 = nn.Conv2d(6, 16, kernel_size=5)
-        
-        # Define MaxPooling Layers
-        # Default Stride is = to kernel_size
-        self.maxpool = nn.MaxPool2d(kernel_size=2)
-        
-        # Define Linear/Fully connected/ Dense Layers
-        # Input to linear1 is the number of features from previous conv - 16x5x5
-        # output of linear1 is 120
-        self.linear1 = nn.Linear(16*5*5, 120)
-        # output of linear2 is 84
-        self.linear2 = nn.Linear(120, 84)
-        # output of linear3 is 10
-        self.linear3 = nn.Linear(84, 10)
+        self.model = model
 
         self.device = device
         self.loss_fun = loss_fun
         self.batch_size = batch_size
         self.learning_rate = learning_rate
+        self.start_epoch = 0
+        self.best_valid_acc = 0
 
         self.train_loss_logger = []
-
         self.train_acc_logger = []
         self.val_acc_logger = []
 
@@ -47,9 +30,62 @@ class LeNet(nn.Module):
         self.valid_loader = None
 
         self.set_optimizer()
+        self.save_path = os.path.join(save_dir, model_name + ".pt")
+        self.save_dir = save_dir
+
+        # Create Save Path from save_dir and model_name, we will save and load our checkpoint here
+        # Create the save directory if it does note exist
+        if not os.path.isdir(self.save_dir):
+            os.makedirs(self.save_dir)
+
+        if start_from_checkpoint:
+            self.load_checkpoint()
+        else:
+            # If checkpoint does exist and start_from_checkpoint = False
+            # Raise an error to prevent accidental overwriting
+            if os.path.isfile(self.save_path):
+                raise ValueError("Warning Checkpoint exists")
+            else:
+                print("Starting from scratch")
 
     def set_optimizer(self):
         self.optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)
+
+    def load_checkpoint(self):
+        # Check if checkpoint exists
+        if os.path.isfile(self.save_path):
+            # Load Checkpoint
+            check_point = torch.load(self.save_path)
+
+            # Checkpoint is saved as a python dictionary
+            # Here we unpack the dictionary to get our previous training states
+            self.model.load_state_dict(check_point['model_state_dict'])
+            self.optimizer.load_state_dict(check_point['optimizer_state_dict'])
+
+            self.start_epoch = check_point['epoch']
+            self.best_valid_acc = check_point['best_valid_acc']
+
+            self.train_loss_logger = check_point['train_loss_logger']
+            self.train_acc_logger = check_point['train_acc_logger']
+            self.val_acc_logger = check_point['val_acc_logger']
+
+            print("Checkpoint loaded, starting from epoch:", self.start_epoch)
+        else:
+            # Raise Error if it does not exist
+            raise ValueError("Checkpoint Does not exist")
+
+    def save_checkpoint(self, epoch, valid_acc):
+        self.best_valid_acc = valid_acc
+
+        torch.save({
+            'epoch': epoch,
+            'model_state_dict': self.model.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+            'best_valid_acc': valid_acc,
+            'train_loss_logger': self.train_loss_logger,
+            'train_acc_logger': self.train_acc_logger,
+            'val_acc_logger': self.val_acc_logger,
+        }, self.save_path)
 
     def set_data(self, train_set, test_set, val_set):
 
@@ -78,6 +114,7 @@ class LeNet(nn.Module):
 
             # Zero gradients
             self.optimizer.zero_grad()
+
             # Backpropagate gradients
             loss.backward()
             # Do a single optimization step
@@ -124,27 +161,5 @@ class LeNet(nn.Module):
         return epoch_acc / len(loader.dataset)
 
     def forward(self, x):
-        # Pass input through conv layers
-        # x shape is BatchSize-3-32-32
-        
-        out1 = F.relu(self.conv1(x))
-        # out1 shape is BatchSize-6-28-28
-        out1 = self.maxpool(out1)
-        # out1 shape is BatchSize-6-14-14
-
-        out2 = F.relu(self.conv2(out1))
-        # out2 shape is BatchSize-16-10-10
-        out2 = self.maxpool(out2)
-        # out2 shape is BatchSize-16-5-5
-
-        # Flatten out2 to shape BatchSize-16x5x5
-        out2 = out2.view(out2.shape[0], -1)
-        
-        out3 = F.relu(self.linear1(out2))
-        # out3 shape is BatchSize-120
-        out4 = F.relu(self.linear2(out3))
-        # out4 shape is BatchSize-84
-        out5 = self.linear3(out4)
-        # out5 shape is BatchSize-10
-        return out5
+        return self.model(x)
     

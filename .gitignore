@@ -1,5 +1,7 @@
 __pycache__/
 section/
+Models/
 .ipynb_checkpoints/
 .idea/
 .gz
+.pt
