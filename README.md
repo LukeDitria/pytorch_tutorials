@@ -19,12 +19,12 @@ Section 1 -> Implementing some basic Machine Learning Algorithms in Python with 
 Section 2 -> Pytorch intro and basics, basic Machine Learning Algorithms with Pytorch<br>
 Section 3 -> Multi-Layer Perceptron (MLP) for Classification and Non-Linear Regression<br>
 Section 4 -> Pytorch Convolutions and CNNs <br>
-
-## Contents (In Progress!)
 Section 5 -> Pytorch Transfer Learning <br>
 
-## Contents (To Come!)
+## Contents (In Progress!)
 Section 6 -> Pytorch Tools and Training Techniques <br>
+
+## Contents (To Come!)
 Section 7 -> Pytorch Bounding Box Detection and Image Segmentation <br>
 Section 8 -> Pytorch Image Generation <br>
 Section 9 -> Pytorch Trained Model Interpretation??? <br>
