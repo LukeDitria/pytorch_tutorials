@@ -93,9 +93,9 @@ class ModelTrainer(nn.Module):
         print(f'Number of validation examples: {len(val_set)}')
         print(f'Number of testing examples: {len(test_set)}')
 
-        self.train_loader = dataloader.DataLoader(train_set, shuffle=True, batch_size=self.batch_size)
-        self.valid_loader = dataloader.DataLoader(val_set, shuffle=False, batch_size=self.batch_size)
-        self.test_loader = dataloader.DataLoader(test_set, shuffle=False, batch_size=self.batch_size)
+        self.train_loader = dataloader.DataLoader(train_set, shuffle=True, batch_size=self.batch_size, num_workers=4)
+        self.valid_loader = dataloader.DataLoader(val_set, shuffle=False, batch_size=self.batch_size, num_workers=4)
+        self.test_loader = dataloader.DataLoader(test_set, shuffle=False, batch_size=self.batch_size, num_workers=4)
 
     # This function should perform a single training epoch using our training data
     def train_model(self):
