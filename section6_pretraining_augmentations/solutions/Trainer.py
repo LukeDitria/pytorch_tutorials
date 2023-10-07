@@ -2,17 +2,18 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data.dataloader as dataloader
-import os
 
+import os
 from tqdm.notebook import trange, tqdm
 
 
 class ModelTrainer(nn.Module):
-    def __init__(self, model, device, loss_fun, batch_size, learning_rate, save_dir, model_name, start_from_checkpoint=False):
+    def __init__(self, model, output_size, device, loss_fun, batch_size, learning_rate, save_dir, model_name,
+                 start_from_checkpoint=False, run_evaluate=True):
+
         # Call the __init__ function of the parent nn.module class
         super(ModelTrainer, self).__init__()
         self.optimizer = None
-        self.model = model
 
         self.device = device
         self.loss_fun = loss_fun
@@ -29,11 +30,15 @@ class ModelTrainer(nn.Module):
         self.test_loader = None
         self.valid_loader = None
 
+        self.output_size = output_size
+
+        self.model = self.change_output(model, output_size=output_size)
         self.set_optimizer()
         self.save_path = os.path.join(save_dir, model_name + ".pt")
         self.save_dir = save_dir
 
         self.lr_schedule = None
+        self.run_evaluate = run_evaluate
 
         # Create Save Path from save_dir and model_name, we will save and load our checkpoint here
         # Create the save directory if it does note exist
@@ -49,6 +54,34 @@ class ModelTrainer(nn.Module):
                 raise ValueError("Warning Checkpoint exists")
             else:
                 print("Starting from scratch")
+
+    def __get_layer__(self, num_ftrs, output_size):
+
+        layer = nn.Linear(num_ftrs, output_size).to(self.device)
+
+        return layer
+
+    def change_output(self, model, output_size):
+
+        if hasattr(model, "fc"):
+            num_ftrs = model.fc.in_features
+            model.fc = self.__get_layer__(num_ftrs, output_size)
+        elif hasattr(model, "classifier"):
+            if isinstance(model.classifier, nn.Linear):
+                num_ftrs = model.classifier.in_features
+                model.classifier = self.__get_layer__(num_ftrs, output_size)
+            if isinstance(model.classifier, nn.Sequential):
+                num_ftrs = model.classifier[-1].in_features
+                model.classifier[-1] = self.__get_layer__(num_ftrs, output_size)
+        elif hasattr(model, "heads"):
+            if isinstance(model.heads, nn.Linear):
+                num_ftrs = model.heads.in_features
+                model.heads = self.__get_layer__(num_ftrs, output_size)
+            if isinstance(model.heads, nn.Sequential):
+                num_ftrs = model.heads[-1].in_features
+                model.heads[-1] = self.__get_layer__(num_ftrs, output_size)
+
+        return model
 
     def set_optimizer(self):
         self.optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)
@@ -98,9 +131,9 @@ class ModelTrainer(nn.Module):
         print(f'Number of validation examples: {len(val_set)}')
         print(f'Number of testing examples: {len(test_set)}')
 
-        self.train_loader = dataloader.DataLoader(train_set, shuffle=True, batch_size=self.batch_size, num_workers=4)
-        self.valid_loader = dataloader.DataLoader(val_set, shuffle=False, batch_size=self.batch_size, num_workers=4)
-        self.test_loader = dataloader.DataLoader(test_set, shuffle=False, batch_size=self.batch_size, num_workers=4)
+        self.train_loader = dataloader.DataLoader(train_set, shuffle=True, batch_size=self.batch_size, num_workers=8)
+        self.valid_loader = dataloader.DataLoader(val_set, shuffle=False, batch_size=self.batch_size, num_workers=8)
+        self.test_loader = dataloader.DataLoader(test_set, shuffle=False, batch_size=self.batch_size, num_workers=8)
 
     def run_training(self, num_epochs):
         valid_acc = 0
@@ -113,17 +146,20 @@ class ModelTrainer(nn.Module):
             # Call the training function and pass training dataloader etc
             self.train_model()
 
-            # Call the modules evaluate function for train and validation set
-            train_acc = self.evaluate_model(train_test_val="train")
-            valid_acc = self.evaluate_model(train_test_val="val")
+            if self.run_evaluate:
+                # Call the modules evaluate function for train and validation set
+                train_acc = self.evaluate_model(train_test_val="train")
+                valid_acc = self.evaluate_model(train_test_val="val")
+
+                # Check if the current validation accuracy is greater than the previous best
+                # If so, then save the model
+                if valid_acc > self.best_valid_acc:
+                    self.save_checkpoint(epoch, valid_acc)
+            else:
+                self.save_checkpoint(epoch, 0)
 
             if self.lr_schedule is not None:
                 self.lr_schedule.step()
-
-            # Check if the current validation accuracy is greater than the previous best
-            # If so, then save the model
-            if valid_acc > self.best_valid_acc:
-                self.save_checkpoint(epoch, valid_acc)
 
     # This function should perform a single training epoch using our training data
     def train_model(self):
@@ -178,7 +214,7 @@ class ModelTrainer(nn.Module):
                 fx = self.forward(x.to(self.device))
 
                 # Log the cumulative sum of the acc
-                epoch_acc += (fx.argmax(1) == y.to(self.device)).sum().item()
+                epoch_acc += (fx.argmax(-1) == y.to(self.device)).sum().item()
 
         # Log the accuracy from the epoch
         if train_test_val == "train":
