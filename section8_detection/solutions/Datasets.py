@@ -8,11 +8,13 @@ import os
 import numpy as np
 from PIL import Image, ImageOps
 import pandas as pd
-import copy
 
 
 class CUB200(Dataset):
     def __init__(self, data_set_root, transform, test_train=1, image_size=128, return_masks=False):
+
+        # Dataset found here
+        # https://www.kaggle.com/datasets/wenewone/cub2002011
         
         class_list_path = os.path.join(data_set_root, "CUB_200_2011/CUB_200_2011/image_class_labels.txt")
         self.data_df = pd.read_csv(class_list_path, sep=" ", names=["index", "class"])
