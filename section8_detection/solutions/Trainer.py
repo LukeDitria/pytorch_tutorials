@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data.dataloader as dataloader
+import torchvision.transforms as transforms
 
 import os
 from tqdm.notebook import trange, tqdm
@@ -65,24 +66,25 @@ class ModelTrainer(nn.Module):
         return layer
 
     def change_output(self, model, output_size):
-
-        if hasattr(model, "fc"):
-            num_ftrs = model.fc.in_features
-            model.fc = self.__get_layer__(num_ftrs, output_size)
-        elif hasattr(model, "classifier"):
-            if isinstance(model.classifier, nn.Linear):
-                num_ftrs = model.classifier.in_features
-                model.classifier = self.__get_layer__(num_ftrs, output_size)
-            if isinstance(model.classifier, nn.Sequential):
-                num_ftrs = model.classifier[-1].in_features
-                model.classifier[-1] = self.__get_layer__(num_ftrs, output_size)
-        elif hasattr(model, "heads"):
-            if isinstance(model.heads, nn.Linear):
-                num_ftrs = model.heads.in_features
-                model.heads = self.__get_layer__(num_ftrs, output_size)
-            if isinstance(model.heads, nn.Sequential):
-                num_ftrs = model.heads[-1].in_features
-                model.heads[-1] = self.__get_layer__(num_ftrs, output_size)
+        
+        if output_size > 0:
+            if hasattr(model, "fc"):
+                num_ftrs = model.fc.in_features
+                model.fc = self.__get_layer__(num_ftrs, output_size)
+            elif hasattr(model, "classifier"):
+                if isinstance(model.classifier, nn.Linear):
+                    num_ftrs = model.classifier.in_features
+                    model.classifier = self.__get_layer__(num_ftrs, output_size)
+                if isinstance(model.classifier, nn.Sequential):
+                    num_ftrs = model.classifier[-1].in_features
+                    model.classifier[-1] = self.__get_layer__(num_ftrs, output_size)
+            elif hasattr(model, "heads"):
+                if isinstance(model.heads, nn.Linear):
+                    num_ftrs = model.heads.in_features
+                    model.heads = self.__get_layer__(num_ftrs, output_size)
+                if isinstance(model.heads, nn.Sequential):
+                    num_ftrs = model.heads[-1].in_features
+                    model.heads[-1] = self.__get_layer__(num_ftrs, output_size)
 
         return model
 
@@ -184,6 +186,9 @@ class ModelTrainer(nn.Module):
             self.optimizer.zero_grad()
             # Backpropagate gradients
             self.scaler.scale(loss).backward()
+            # Clip grads
+            self.scaler.unscale_(self.optimizer)
+            torch.nn.utils.clip_grad_norm_(self.parameters(), 5)
             # Do a single optimization step
             self.scaler.step(self.optimizer)
             self.scaler.update()
