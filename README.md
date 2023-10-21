@@ -21,6 +21,7 @@ Section 3 -> Multi-Layer Perceptron (MLP) for Classification and Non-Linear Regr
 Section 4 -> Pytorch Convolutions and CNNs <br>
 Section 5 -> Pytorch Transfer Learning <br>
 Section 6 -> Pytorch Tools and Training Techniques <br>
+#### Applications + Advanced
 Section 7 -> Pytorch Autoencoders and Representation Learning <br>
 
 ## Contents (In Progress!)
@@ -28,8 +29,8 @@ Section 8 -> Pytorch Bounding Box Detection and Image Segmentation <br>
 
 ## Contents (To Come!)
 Section 9 -> Pytorch Image Generation <br>
-Section 10 -> Pytorch Trained Model Interpretation??? <br>
-Section 111 -> Pytorch Reinforcement Learning??? <br>
+Section 10 -> Pytorch Trained Model Interpretation ??? <br>
+Section 111 -> Pytorch Reinforcement Learning ??? <br>
 
 ## Folder layout:
 notebooks -> Tutorials and Skeleton code (Start here)<br>
