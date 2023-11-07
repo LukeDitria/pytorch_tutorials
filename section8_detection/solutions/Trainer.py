@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data.dataloader as dataloader
-import torchvision.transforms as transforms
 
 import os
 from tqdm.notebook import trange, tqdm
@@ -10,7 +9,7 @@ from tqdm.notebook import trange, tqdm
 
 class ModelTrainer(nn.Module):
     def __init__(self, model, output_size, device, loss_fun, batch_size, learning_rate, save_dir, model_name,
-                 elav_metric, start_from_checkpoint=False, run_evaluate=True):
+                 eval_metric, start_from_checkpoint=False, run_evaluate=True):
 
         # Call the __init__ function of the parent nn.module class
         super(ModelTrainer, self).__init__()
@@ -42,7 +41,7 @@ class ModelTrainer(nn.Module):
 
         self.lr_schedule = None
         self.run_evaluate = run_evaluate
-        self.elav_metric = elav_metric
+        self.eval_metric = eval_metric
 
         # Create Save Path from save_dir and model_name, we will save and load our checkpoint here
         # Create the save directory if it does note exist
@@ -137,8 +136,8 @@ class ModelTrainer(nn.Module):
         print(f'Number of testing examples: {len(test_set)}')
 
         self.train_loader = dataloader.DataLoader(train_set, shuffle=True, batch_size=self.batch_size, num_workers=8)
-        self.valid_loader = dataloader.DataLoader(val_set, shuffle=False, batch_size=self.batch_size, num_workers=8)
-        self.test_loader = dataloader.DataLoader(test_set, shuffle=False, batch_size=self.batch_size, num_workers=8)
+        self.valid_loader = dataloader.DataLoader(val_set, shuffle=True, batch_size=self.batch_size, num_workers=8)
+        self.test_loader = dataloader.DataLoader(test_set, shuffle=True, batch_size=self.batch_size, num_workers=8)
 
     def run_training(self, num_epochs):
         valid_acc = 0
@@ -224,7 +223,7 @@ class ModelTrainer(nn.Module):
                     fx = self.forward(data[0].to(self.device))
 
                     # Log the cumulative sum of the acc
-                    epoch_acc += self.elav_metric(fx, data).sum().cpu().item()
+                    epoch_acc += self.eval_metric(fx, data).sum().cpu().item()
 
         # Log the accuracy from the epoch
         if train_test_val == "train":
