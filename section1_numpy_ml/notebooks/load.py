@@ -19,7 +19,7 @@ def _download(file_name):
 
 def download_mnist():
     for v in key_file.values():
-       _download(v)
+        _download(v)
 
 def _load_label(file_name):
     file_path = dataset_dir + "/" + file_name
@@ -113,7 +113,7 @@ key_file = {
     'test_label':'t10k-labels-idx1-ubyte.gz'
 }
 
-dataset_dir = os.path.dirname(os.path.abspath(__file__))
+dataset_dir = "../../datasets/MNIST/raw"
 save_file = dataset_dir + "/mnist.pkl"
 
 train_num = 60000
