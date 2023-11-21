@@ -157,7 +157,7 @@ class ModelTrainer(nn.Module):
                     self.save_checkpoint(epoch, valid_acc)
             else:
                 self.save_checkpoint(epoch, 0)
-
+                
             if self.lr_schedule is not None:
                 self.lr_schedule.step()
 
@@ -186,7 +186,7 @@ class ModelTrainer(nn.Module):
 
             # Log the loss for plotting
             self.train_loss_logger.append(loss.item())
-
+                
     # This function should perform a single evaluation epoch, it WILL NOT be used to train our model
     def evaluate_model(self, train_test_val="test"):
         if self.test_loader is None:
