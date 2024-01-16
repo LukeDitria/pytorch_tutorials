@@ -10,7 +10,9 @@ If you can't find an explaination on something you want to know let me know and 
 <b>Let me know if you want to see anything else! </b><br>
 
 ## Corresponding Videos
-[Youtube Playlist](https://youtube.com/playlist?list=PLN8j_qfCJpNhhY26TQpXC5VeK-_q3YLPa&si=bMjdMvuVIX8X0yTz)<br>
+[Pytorch Youtube Playlist](https://youtube.com/playlist?list=PLN8j_qfCJpNhhY26TQpXC5VeK-_q3YLPa&si=bMjdMvuVIX8X0yTz)<br>
+[Reinforcement Learning Youtube Playlist]([https://youtube.com/playlist?list=PLN8j_qfCJpNhhY26TQpXC5VeK-_q3YLPa&si=bMjdMvuVIX8X0yTz](https://youtube.com/playlist?list=PLN8j_qfCJpNg5-6LcqGn_LZMyB99GoYba&si=1HVWNHNQOhw2GrYq))<br>
+
 Let me know if you want to see a video on any particular section!
 
 ## Contents (So Far!)
