@@ -24,11 +24,12 @@ Section 6 -> Pytorch Tools and Training Techniques <br>
 #### Applications + Advanced
 Section 7 -> Pytorch Autoencoders and Representation Learning <br>
 Section 8 -> Pytorch Bounding Box Detection and Image Segmentation <br>
-
-## Contents (In Progress!)
 Section 9 -> Pytorch Image Generation <br>
 Section 10 -> Pytorch Trained Model Interpretation <br>
 Section 11 -> Pytorch Reinforcement Learning <br>
+
+## Contents (In Progress!)
+
 
 ## Contents (To Come!)
 ???
