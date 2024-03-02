@@ -34,7 +34,9 @@ Section 11 -> Pytorch Reinforcement Learning <br>
 
 
 ## Contents (To Come!)
-???
+Section 12 -> Using Sequential Data <br>
+Section 13 -> All about Attention <br>
+Section 14 -> Transformer Time <br>
 
 ## Folder layout:
 notebooks -> Tutorials and Skeleton code (Start here)<br>
