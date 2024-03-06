@@ -15,6 +15,9 @@ If you can't find an explaination on something you want to know let me know and 
 
 Let me know if you want to see a video on any particular section!
 
+## Discord Server
+Get help in my [Discord Server](https://discord.gg/8g92X5hjYF)<br>
+
 ## Contents (So Far!)
 Section 0 -> Python basics that will be expected knowledge<br>
 Section 1 -> Implementing some basic Machine Learning Algorithms in Python with Numpy<br>
