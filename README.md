@@ -36,10 +36,10 @@ Section 8 -> Pytorch Bounding Box Detection and Image Segmentation <br>
 Section 9 -> Pytorch Image Generation <br>
 Section 10 -> Pytorch Trained Model Interpretation <br>
 Section 11 -> Pytorch Reinforcement Learning <br>
-
-## Contents (In Progress!)
 #### Sequential Data
 Section 12 -> Using Sequential Data <br>
+
+## Contents (In Progress!)
 
 ## Contents (To Come!)
 Section 13 -> All about Attention <br>
