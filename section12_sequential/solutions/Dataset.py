@@ -10,6 +10,7 @@ class WeatherDataset(Dataset):
         df['Date'] = pd.to_datetime(df['Date'])  # Convert 'Date' column to datetime
         df.set_index('Date', inplace=True)
 
+        # Calculate the mean and std to normalise the data
         mean = df.mean()
         std = df.std()
         df = (df - mean) / std
@@ -17,6 +18,7 @@ class WeatherDataset(Dataset):
         self.mean = torch.tensor(mean.to_numpy()).reshape(1, -1)
         self.std = torch.tensor(std.to_numpy()).reshape(1, -1)
 
+        # Split the dataset to test/train set based on a split date
         if train_test == "train":
             self.dataset = df[df.index < split_date]
         elif train_test == "test":
@@ -27,6 +29,7 @@ class WeatherDataset(Dataset):
         self.day_range = day_range
 
     def __getitem__(self, index):
+        # Index a range of days
         end_index = index + self.day_range
         current_series = self.dataset.iloc[index:end_index]
 
