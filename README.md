@@ -9,7 +9,8 @@ If you can't find an explaination on something you want to know let me know and 
 <b>More sections to come! </b><br>
 <b>Let me know if you want to see anything else! </b><br>
 
-<b> Donations  </b> <br>
+## Help support this work!
+<b> Donate here! </b> <br>
 https://www.buymeacoffee.com/lukeditria
 </br>
 
