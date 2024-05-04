@@ -14,6 +14,7 @@ def _download(file_name):
         return
 
     print("Downloading " + file_name + " ... ")
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     urllib.request.urlretrieve(url_base + file_name, file_path)
     print("Done")
 
