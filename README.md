@@ -1,5 +1,4 @@
 <img src="datasets/banner.png" alt="Pytorch Tutorials" width="800"/>
-<br>
 
 # Beginner Level Deep Learning Tutorials in Pytorch! <br>
 Note that these tutorials expect some knowledge of deep learning concepts. While some of the concepts are explained we are mainly focusing on (in detail) how to implement them in python with Pytorch.<br>
