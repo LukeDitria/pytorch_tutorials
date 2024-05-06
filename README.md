@@ -1,6 +1,10 @@
+<img src="datasets/banner.png" alt="Pytorch Tutorials" width="800"/>
+<br>
+
 # Beginner Level Deep Learning Tutorials in Pytorch! <br>
 Note that these tutorials expect some knowledge of deep learning concepts. While some of the concepts are explained we are mainly focusing on (in detail) how to implement them in python with Pytorch.<br>
 I have compiled a list of additional resources that cover many of the concepts we look at, the YouTube series section are incredibly valuable!<br>
+
 [Deep learning google sheets](https://docs.google.com/spreadsheets/d/1WNJmgsVrLqH522yQ47euqAuO83a4WvJe/edit?usp=sharing&ouid=115240163501200760663&rtpof=true&sd=true)<br>
 If you have any good resources let me know and I can add them!<br>
 If you can't find an explaination on something you want to know let me know and i'll try to find it!<br>
@@ -11,6 +15,7 @@ If you can't find an explaination on something you want to know let me know and 
 
 ## Help support this work!
 <b> Donate here! </b> <br>
+
 https://www.buymeacoffee.com/lukeditria
 </br>
 
