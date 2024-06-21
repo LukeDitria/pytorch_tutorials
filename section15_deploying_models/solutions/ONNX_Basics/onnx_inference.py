@@ -48,7 +48,7 @@ def run_sample(session, image):
 
 
 if __name__ == "__main__":
-    ort_session = onnxruntime.InferenceSession("./resnet18.onnx",
+    ort_session = onnxruntime.InferenceSession("./efficientnet_b1.onnx",
                                                providers=['CPUExecutionProvider'])
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
