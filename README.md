@@ -48,9 +48,10 @@ Section 13 -> All about Attention <br>
 
 ## Contents (In Progress!)
 Section 14 -> Transformer Time <br>
+Section 15 -> Deploying Models <br>
 
 ## Contents (To Come!)
-Section 15 -> Deploying Models?? <br>
+Section 16 -> Using Huggingface <br>
 
 ## Folder layout:
 notebooks -> Tutorials and Skeleton code (Start here)<br>
