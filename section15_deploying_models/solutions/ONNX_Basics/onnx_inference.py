@@ -78,7 +78,7 @@ if __name__ == "__main__":
             print("Exiting...")
             break
         elif key & 0xFF == ord(' '):  # Call function if spacebar is pressed
-            cropped_frame = crop_resize(Image.fromarray(frame), 244)
+            cropped_frame = crop_resize(Image.fromarray(frame), 224)
             norm_image = image_normalise_reshape(np.array(cropped_frame), mean, std)
 
             start_time = time.time()
