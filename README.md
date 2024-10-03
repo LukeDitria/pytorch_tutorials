@@ -45,13 +45,13 @@ Section 11 -> Pytorch Reinforcement Learning <br>
 #### Sequential Data
 Section 12 -> Using Sequential Data <br>
 Section 13 -> All about Attention <br>
+Section 14 -> Transformer Time <br>
 
 ## Contents (In Progress!)
-Section 14 -> Transformer Time <br>
 Section 15 -> Deploying Models <br>
+Section 16 -> Advanced Applications <br>
 
 ## Contents (To Come!)
-Section 16 -> Using Huggingface <br>
 
 ## Folder layout:
 notebooks -> Tutorials and Skeleton code (Start here)<br>
