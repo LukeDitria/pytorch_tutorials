@@ -93,9 +93,21 @@ class ModelTrainer(nn.Module):
         print(f'Number of validation examples: {len(val_set)}')
         print(f'Number of testing examples: {len(test_set)}')
 
-        self.train_loader = dataloader.DataLoader(train_set, shuffle=True, batch_size=self.batch_size, num_workers=4)
-        self.valid_loader = dataloader.DataLoader(val_set, shuffle=False, batch_size=self.batch_size, num_workers=4)
-        self.test_loader = dataloader.DataLoader(test_set, shuffle=False, batch_size=self.batch_size, num_workers=4)
+        self.train_loader = dataloader.DataLoader(
+            train_set,
+            shuffle=True,
+            batch_size=self.batch_size,
+        )
+        self.valid_loader = dataloader.DataLoader(
+            val_set,
+            shuffle=False,
+            batch_size=self.batch_size,
+        )
+        self.test_loader = dataloader.DataLoader(
+            test_set,
+            shuffle=False,
+            batch_size=self.batch_size,
+        )
 
     # This function should perform a single training epoch using our training data
     def train_model(self):
@@ -105,12 +117,13 @@ class ModelTrainer(nn.Module):
 
         # Set Network in train mode
         self.train()
+        
         for i, (x, y) in enumerate(tqdm(self.train_loader, leave=False, desc="Training")):
             # Forward pass of image through network and get output
-            fx = self.forward(x.to(self.device))
-
+            fx = self.forward(x.to(self.device, non_blocking=True))
+            
             # Calculate loss using loss function
-            loss = self.loss_fun(fx, y.to(self.device))
+            loss = self.loss_fun(fx, y.to(self.device, non_blocking=True))
 
             # Zero gradients
             self.optimizer.zero_grad()
@@ -121,7 +134,7 @@ class ModelTrainer(nn.Module):
             self.optimizer.step()
 
             # Log the loss for plotting
-            self.train_loss_logger.append(loss.item())
+            self.train_loss_logger.append(loss.detach().item())
 
     # This function should perform a single evaluation epoch, it WILL NOT be used to train our model
     def evaluate_model(self, train_test_val="test"):

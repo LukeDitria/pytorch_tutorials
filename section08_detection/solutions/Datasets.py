@@ -12,13 +12,13 @@ class CUB200(Dataset):
         # Dataset found here
         # https://www.kaggle.com/datasets/wenewone/cub2002011
         
-        class_list_path = os.path.join(data_set_root, "CUB_200_2011/CUB_200_2011/image_class_labels.txt")
+        class_list_path = os.path.join(data_set_root, "image_class_labels.txt")
         self.data_df = pd.read_csv(class_list_path, sep=" ", names=["index", "class"])
 
-        data_list_path = os.path.join(data_set_root, "CUB_200_2011/CUB_200_2011/images.txt")
+        data_list_path = os.path.join(data_set_root, "images.txt")
         cub200_df = pd.read_csv(data_list_path, sep=" ", names=["index", "file_path"])
 
-        bbox_list_path = os.path.join(data_set_root, "CUB_200_2011/CUB_200_2011/bounding_boxes.txt")
+        bbox_list_path = os.path.join(data_set_root, "bounding_boxes.txt")
         bbox_df = pd.read_csv(bbox_list_path, sep=" ", names=["index", "x", "y", "width", "height"])
 
         # Use custom test/train split 1/0
@@ -35,7 +35,7 @@ class CUB200(Dataset):
         self.transform = transform
 
         self.data_set_root = data_set_root
-        self.image_root_dir = os.path.join(self.data_set_root, "CUB_200_2011/CUB_200_2011/images")
+        self.image_root_dir = os.path.join(self.data_set_root, "images")
         self.mask_root_dir = os.path.join(self.data_set_root, "segmentations")
 
     def get_bbox_list(self, data, img_size):

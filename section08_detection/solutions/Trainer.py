@@ -34,7 +34,7 @@ class ModelTrainer(nn.Module):
 
         self.model = self.change_output(model, output_size=output_size)
         self.set_optimizer()
-        self.scaler = torch.cuda.amp.GradScaler()
+        self.scaler = torch.GradScaler()
 
         self.save_path = os.path.join(save_dir, model_name + ".pt")
         self.save_dir = save_dir
@@ -44,14 +44,14 @@ class ModelTrainer(nn.Module):
         self.eval_metric = eval_metric
 
         # Create Save Path from save_dir and model_name, we will save and load our checkpoint here
-        # Create the save directory if it does note exist
+        # Create the save directory if it does not exist
         if not os.path.isdir(self.save_dir):
             os.makedirs(self.save_dir)
 
         if start_from_checkpoint:
             self.load_checkpoint()
         else:
-            # If checkpoint does exist and start_from_checkpoint = False
+            # If a checkpoint does exist and start_from_checkpoint = False
             # Raise an error to prevent accidental overwriting
             if os.path.isfile(self.save_path):
                 raise ValueError("Warning Checkpoint exists")
@@ -99,7 +99,7 @@ class ModelTrainer(nn.Module):
             # Load Checkpoint
             check_point = torch.load(self.save_path)
 
-            # Checkpoint is saved as a python dictionary
+            # Checkpoint is saved as a Python dictionary
             # Here we unpack the dictionary to get our previous training states
             self.model.load_state_dict(check_point['model_state_dict'])
             self.optimizer.load_state_dict(check_point['optimizer_state_dict'])
@@ -113,7 +113,7 @@ class ModelTrainer(nn.Module):
 
             print("Checkpoint loaded, starting from epoch:", self.start_epoch)
         else:
-            # Raise Error if it does not exist
+            # Raise an Error if it does not exist
             raise ValueError("Checkpoint Does not exist")
 
     def save_checkpoint(self, epoch, valid_acc):
@@ -174,7 +174,7 @@ class ModelTrainer(nn.Module):
         # Set Network in train mode
         self.train()
         for i, data in enumerate(tqdm(self.train_loader, leave=False, desc="Training")):
-            with torch.cuda.amp.autocast():
+            with torch.autocast(device_type='cuda', dtype=torch.float16):
                 # Forward pass of image through network and get output
                 fx = self.forward(data[0].to(self.device))
 
@@ -218,7 +218,7 @@ class ModelTrainer(nn.Module):
         self.eval()
         with torch.no_grad():
             for i, data in enumerate(tqdm(loader, leave=False, desc=state)):
-                with torch.cuda.amp.autocast():
+                with torch.autocast(device_type='cuda', dtype=torch.float16):
                     # Forward pass of image through network
                     fx = self.forward(data[0].to(self.device))
 
