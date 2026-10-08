@@ -77,7 +77,7 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
 
     Returns
     -------
-    (Trainig Image, Training Label), (Test Image, Test Label)
+    (Training Image, Training Label), (Test Image, Test Label)
     """
     if not os.path.exists(save_file):
         init_mnist()

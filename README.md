@@ -6,7 +6,7 @@ I have compiled a list of additional resources that cover many of the concepts w
 
 [Deep learning google sheets](https://docs.google.com/spreadsheets/d/1WNJmgsVrLqH522yQ47euqAuO83a4WvJe/edit?usp=sharing&ouid=115240163501200760663&rtpof=true&sd=true)<br>
 If you have any good resources let me know and I can add them!<br>
-If you can't find an explaination on something you want to know let me know and i'll try to find it!<br>
+If you can't find an explanation on something you want to know let me know and i'll try to find it!<br>
 <br>
 <b>Some level of basic Python programming knowledge is expected.</b><br>
 <b>More sections to come! </b><br>
