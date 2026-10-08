@@ -14,6 +14,7 @@ def _download(file_name):
         return
 
     print("Downloading " + file_name + " ... ")
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     urllib.request.urlretrieve(url_base + file_name, file_path)
     print("Done")
 
@@ -76,7 +77,7 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
 
     Returns
     -------
-    (Trainig Image, Training Label), (Test Image, Test Label)
+    (Training Image, Training Label), (Test Image, Test Label)
     """
     if not os.path.exists(save_file):
         init_mnist()
